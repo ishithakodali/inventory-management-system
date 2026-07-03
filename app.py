@@ -1,5 +1,7 @@
 import os
 from flask import Flask, render_template
+from models import db
+from models.product import Product
 
 def create_app():
     app = Flask(__name__)
@@ -10,8 +12,13 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
     # --- Blueprint Registrations ---
-    # Register blueprints here
+    from routes.products import products_bp
+    app.register_blueprint(products_bp)
     
     @app.route('/')
     def index():
