@@ -20,7 +20,6 @@ def add():
     price = request.form.get('price')
     stock_quantity = request.form.get('stock_quantity')
     supplier = request.form.get('supplier')
-    low_stock_threshold = request.form.get('low_stock_threshold')
 
     if not name or not category or not supplier:
         flash('Name, Category, and Supplier are required.', 'danger')
@@ -36,12 +35,7 @@ def add():
         if stock_quantity < 0:
             flash('Stock cannot be negative.', 'danger')
             return redirect(url_for('products.index'))
-            
-        low_stock_threshold = int(low_stock_threshold)
-        if low_stock_threshold < 0:
-            flash('Threshold cannot be negative.', 'danger')
-            return redirect(url_for('products.index'))
-            
+
     except (ValueError, TypeError):
         flash('Invalid numeric input.', 'danger')
         return redirect(url_for('products.index'))
@@ -51,8 +45,7 @@ def add():
         category=category,
         price=price,
         stock_quantity=stock_quantity,
-        supplier=supplier,
-        low_stock_threshold=low_stock_threshold
+        supplier=supplier
     )
     db.session.add(new_product)
     db.session.commit()
@@ -68,7 +61,6 @@ def edit(id):
     price = request.form.get('price')
     stock_quantity = request.form.get('stock_quantity')
     supplier = request.form.get('supplier')
-    low_stock_threshold = request.form.get('low_stock_threshold')
 
     if not name or not category or not supplier:
         flash('Name, Category, and Supplier are required.', 'danger')
@@ -84,12 +76,7 @@ def edit(id):
         if stock_quantity < 0:
             flash('Stock cannot be negative.', 'danger')
             return redirect(url_for('products.index'))
-            
-        low_stock_threshold = int(low_stock_threshold)
-        if low_stock_threshold < 0:
-            flash('Threshold cannot be negative.', 'danger')
-            return redirect(url_for('products.index'))
-            
+
     except (ValueError, TypeError):
         flash('Invalid numeric input.', 'danger')
         return redirect(url_for('products.index'))
@@ -99,7 +86,6 @@ def edit(id):
     product.price = price
     product.stock_quantity = stock_quantity
     product.supplier = supplier
-    product.low_stock_threshold = low_stock_threshold
     
     db.session.commit()
     flash('Product updated successfully!', 'success')

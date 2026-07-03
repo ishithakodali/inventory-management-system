@@ -32,26 +32,20 @@
                 <th>Price</th>
                 <th>Stock</th>
                 <th>Supplier</th>
-                <th>Threshold</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for product in products %}
-            <tr {% if product.stock_quantity <= product.low_stock_threshold %}class="table-warning"{% endif %}>
+            <tr>
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.category }}</td>
                 <td>${{ "%.2f"|format(product.price) }}</td>
                 <td>
-                    {% if product.stock_quantity <= product.low_stock_threshold %}
-                    <span class="badge bg-danger">{{ product.stock_quantity }}</span>
-                    {% else %}
                     {{ product.stock_quantity }}
-                    {% endif %}
                 </td>
                 <td>{{ product.supplier }}</td>
-                <td>{{ product.low_stock_threshold }}</td>
                 <td>
                     <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal{{ product.id }}">Edit</button>
                     <form method="POST" action="{{ url_for('products.delete', id=product.id) }}" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this product?');">
@@ -90,10 +84,6 @@
                                     <label class="form-label">Supplier</label>
                                     <input type="text" class="form-control" name="supplier" value="{{ product.supplier }}" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Low Stock Threshold</label>
-                                    <input type="number" min="0" class="form-control" name="low_stock_threshold" value="{{ product.low_stock_threshold }}" required>
-                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -105,7 +95,7 @@
             </div>
             {% else %}
             <tr>
-                <td colspan="8" class="text-center">No products found.</td>
+                <td colspan="7" class="text-center">No products found.</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -141,10 +131,6 @@
                     <div class="mb-3">
                         <label class="form-label">Supplier</label>
                         <input type="text" class="form-control" name="supplier" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Low Stock Threshold</label>
-                        <input type="number" min="0" class="form-control" name="low_stock_threshold" value="0" required>
                     </div>
                 </div>
                 <div class="modal-footer">
