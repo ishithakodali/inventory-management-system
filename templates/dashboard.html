@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2>Inventory Dashboard</h2>
+    </div>
+</div>
+
+<!-- Stats Row -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Products</h5>
+                <p class="card-text display-4">{{ total_products }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Stock</h5>
+                <p class="card-text display-4">{{ total_stock }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title">Products Running Low</h5>
+                <p class="card-text display-4">{{ low_stock_count }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Integration Row -->
+<div class="row">
+    <!-- Recent Purchases -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <strong>Recent Purchases</strong>
+            </div>
+            <div class="card-body">
+                {% if recent_purchases %}
+                    <!-- TODO: Render purchases here -->
+                {% else %}
+                    <div class="text-center text-muted p-4">
+                        <h5>No Data Available</h5>
+                        <p>Recent purchases will appear here.</p>
+                        <small><em>Pending integration with Feature 3 (Purchase Management)</em></small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Sales -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <strong>Recent Sales</strong>
+            </div>
+            <div class="card-body">
+                {% if recent_sales %}
+                    <!-- TODO: Render sales here -->
+                {% else %}
+                    <div class="text-center text-muted p-4">
+                        <h5>No Data Available</h5>
+                        <p>Recent sales will appear here.</p>
+                        <small><em>Pending integration with Feature 4 (Sales Management)</em></small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

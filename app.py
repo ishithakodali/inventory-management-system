@@ -18,7 +18,10 @@ def create_app():
 
     # --- Blueprint Registrations ---
     from routes.products import products_bp
+    from routes.dashboard import dashboard_bp
+    
     app.register_blueprint(products_bp)
+    app.register_blueprint(dashboard_bp)
     
     @app.route('/')
     def index():
