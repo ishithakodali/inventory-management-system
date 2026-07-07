@@ -30,6 +30,24 @@ def create_tables():
         role TEXT NOT NULL
     )
 """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS purchases (
+            id INTEGER PRIMARY KEY,
+            product_id INTEGER,
+            quantity INTEGER,
+            purchase_price REAL,
+            purchase_date DATE
+        )
+""")
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS sales (
+            id INTEGER PRIMARY KEY,
+            product_id INTEGER,
+            quantity INTEGER,
+            selling_price REAL,
+            sale_date DATE
+        )
+""")
 
     conn.commit()
     conn.close()
