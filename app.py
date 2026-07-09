@@ -2,6 +2,7 @@ from flask import Flask, session, redirect
 from routes.auth import auth_bp
 from routes.purchase import purchase_bp
 from routes.sales import sales_bp
+from routes.low_stock import low_stock_bp
 from models.users import create_admin
 from db import get_db_connection, create_tables
 create_tables()
@@ -13,6 +14,7 @@ app.secret_key = "inventory_secret_key"
 app.register_blueprint(auth_bp)
 app.register_blueprint(purchase_bp)
 app.register_blueprint(sales_bp)
+app.register_blueprint(low_stock_bp)
 
 
 @app.route("/") 
