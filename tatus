@@ -1,0 +1,18 @@
+*   [33mb8293fd[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m Merge feature-dashboard into develop
+[31m|[m[32m\[m  
+[31m|[m * [33m5a13932[m[33m ([m[1;31morigin/feature-dashboard[m[33m, [m[1;32mfeature-dashboard[m[33m)[m Track shared inventory database
+[31m|[m * [33mad5614f[m Save dashboard work before troubleshooting
+[31m|[m * [33m3c65d48[m Ignore SQLite database
+[31m|[m * [33m7306451[m WIP: dashboard changes
+* [32m|[m [33me14f82b[m Save current work before switching branches
+[32m|[m[32m/[m  
+* [33m8dbc0b5[m[33m ([m[1;31morigin/feature-products[m[33m, [m[1;32mfeature-products[m[33m)[m Product management database changes
+* [33m0ed6beb[m Added product Management module
+* [33m0597a11[m chore: initialize project structure
+[32m|[m * [33me6ed38b[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m commit
+[32m|[m * [33ma889bee[m commit
+[32m|[m * [33mb984ab9[m commit
+[32m|[m[32m/[m  
+[32m|[m * [33m98ab447[m[33m ([m[1;31morigin/backend[m[33m)[m commit
+[32m|[m[32m/[m  
+* [33m5aca379[m[33m ([m[1;31morigin/frontend[m[33m, [m[1;32mmain[m[33m)[m Initial commit

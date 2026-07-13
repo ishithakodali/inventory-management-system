@@ -1,15 +1,88 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h2>Welcome {{ session['username'] }}</h2>
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2>Inventory Dashboard</h2>
+    </div>
+</div>
 
-<p>Role : {{ session['role'] }}</p>
+<!-- Stats Row -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Products</h5>
+                <p class="card-text display-4">{{ total_products }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Stock</h5>
+                <p class="card-text display-4">{{ total_stock }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title">Products Running Low</h5>
+                <p class="card-text display-4">{{ low_stock_count }}</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-<a href="/logout">Logout</a>
+<!-- Products Running Low Table -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Products Running Low</h5>
+            </div>
+            <div class="card-body">
+                {% if low_stock_products %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Current Stock</th>
+                                <th>Configured Threshold</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in low_stock_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.category }}</td>
+                                <td><strong>{{ product.stock_quantity }}</strong></td>
+                                <td>{{ product.low_stock_threshold }}</td>
+                                <td>
+                                    {% if product.stock_quantity <= (product.low_stock_threshold / 2) %}
+                                    <span class="text-danger">🔴 Critical</span>
+                                    {% else %}
+                                    <span class="text-warning">🟡 Running Low</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted p-3">
+                    <p class="mb-0">No products are currently running low.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 
-</body>
-</html>
+
+{% endblock %}
