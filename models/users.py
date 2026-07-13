@@ -67,3 +67,31 @@ def create_admin():
         connection.commit()
 
     connection.close()
+
+def create_staff():
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM users
+        WHERE username = ?
+    """, ("staff",))
+
+    staff = cursor.fetchone()
+
+    if staff is None:
+
+        cursor.execute("""
+            INSERT INTO users(username, password, role)
+            VALUES (?, ?, ?)
+        """, (
+            "staff",
+            "staff123",
+            "Staff"
+        ))
+
+        connection.commit()
+
+    connection.close()

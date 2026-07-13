@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from db import get_db_connection
 
 products_bp = Blueprint('products', __name__, url_prefix='/products')
 
 @products_bp.route('/')
 def index():
+    if "username" not in session:
+        return redirect("/login")
     search_query = request.args.get('q', '')
     conn = get_db_connection()
     if search_query:
@@ -16,6 +18,10 @@ def index():
 
 @products_bp.route('/add', methods=['POST'])
 def add():
+    if "username" not in session:
+        return redirect("/login")
+    if session.get("role") != "Admin":
+        return "Access Denied", 403
     name = request.form.get('name')
     category = request.form.get('category')
     price = request.form.get('price')
@@ -60,6 +66,11 @@ def add():
 
 @products_bp.route('/<int:id>/edit', methods=['POST'])
 def edit(id):
+    if "username" not in session:
+        return redirect("/login")
+
+    if session.get("role") != "Admin":
+        return "Access Denied", 403
     name = request.form.get('name')
     category = request.form.get('category')
     price = request.form.get('price')
@@ -112,6 +123,11 @@ def edit(id):
 
 @products_bp.route('/<int:id>/delete', methods=['POST'])
 def delete(id):
+    if "username" not in session:
+        return redirect("/login")
+
+    if session.get("role") != "Admin":
+        return "Access Denied", 403
     conn = get_db_connection()
     product = conn.execute("SELECT * FROM products WHERE id = ?", (id,)).fetchone()
     if not product:

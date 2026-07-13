@@ -4,11 +4,12 @@ from routes.purchase import purchase_bp
 from routes.sales import sales_bp
 from routes.low_stock import low_stock_bp
 from routes.products import products_bp
-from models.users import create_admin
+from models.users import create_admin, create_staff
 from db import get_db_connection, create_tables
 
 create_tables()
 create_admin()
+create_staff()
 
 app = Flask(__name__)
 app.secret_key = "inventory_secret_key"
