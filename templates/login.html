@@ -17,23 +17,35 @@
             align-items: center;
         }
         .login-card {
-            max-width: 440px;
+            max-width: 540px;
             width: 100%;
+            padding: 56px;
+        }
+        .login-icon {
+            font-size: 3.5rem; /* ~56px */
+        }
+        .tall-input {
+            height: 56px;
+            font-size: 1rem;
+        }
+        .tall-button {
+            height: 56px;
+            font-size: 1.125rem;
         }
     </style>
 </head>
 <body>
 
-    <div class="card border-0 shadow-sm rounded-4 login-card p-5 mx-3">
+    <div class="card border-0 shadow-sm rounded-4 login-card mx-3">
         <div class="card-body p-0">
             <div class="text-center mb-5">
-                <i class="bi bi-box-seam text-primary fs-1 mb-3 d-inline-block"></i>
-                <h4 class="mb-3 fw-bold text-dark">Inventory Management System</h4>
-                <p class="text-muted small mb-0">Sign in to continue</p>
+                <i class="bi bi-box-seam text-primary login-icon mb-4 d-inline-block"></i>
+                <h2 class="mb-3 fw-bold text-dark fs-2">Inventory Management System</h2>
+                <p class="text-muted fs-6 mb-0">Sign in to continue</p>
             </div>
 
             {% if error %}
-            <div class="alert alert-danger alert-dismissible fade show small" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ error }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -43,7 +55,7 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show small" role="alert">
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
                             {{ message }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
@@ -52,17 +64,17 @@
             {% endwith %}
 
             <form method="POST" action="">
-                <div class="mb-4">
-                    <label for="username" class="form-label text-secondary small fw-medium">Username</label>
-                    <input type="text" class="form-control form-control-lg fs-6" id="username" name="username" placeholder="Enter your username" required>
+                <div class="mb-4 pb-2">
+                    <label for="username" class="form-label text-secondary fw-medium fs-6">Username</label>
+                    <input type="text" class="form-control tall-input" id="username" name="username" placeholder="Enter your username" required>
                 </div>
                 
                 <div class="mb-5">
-                    <label for="password" class="form-label text-secondary small fw-medium">Password</label>
-                    <input type="password" class="form-control form-control-lg fs-6" id="password" name="password" placeholder="Enter your password" required>
+                    <label for="password" class="form-label text-secondary fw-medium fs-6">Password</label>
+                    <input type="password" class="form-control tall-input" id="password" name="password" placeholder="Enter your password" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-lg w-100 py-2 fs-6">Login</button>
+                <button type="submit" class="btn btn-primary tall-button fw-medium w-100 mt-2">Login</button>
             </form>
         </div>
     </div>
