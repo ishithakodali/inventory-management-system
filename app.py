@@ -4,6 +4,7 @@ from routes.purchase import purchase_bp
 from routes.sales import sales_bp
 from routes.low_stock import low_stock_bp
 from routes.products import products_bp
+from routes.reports import reports_bp
 from models.users import create_admin, create_staff
 from db import get_db_connection, create_tables
 
@@ -19,6 +20,7 @@ app.register_blueprint(purchase_bp)
 app.register_blueprint(sales_bp)
 app.register_blueprint(low_stock_bp)
 app.register_blueprint(products_bp)
+app.register_blueprint(reports_bp)
 
 @app.route("/") 
 def home():
