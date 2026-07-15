@@ -27,7 +27,8 @@ def create_tables():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
-        role TEXT NOT NULL
+        role TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'Pending'           
     )
 """)
     cursor.execute("""

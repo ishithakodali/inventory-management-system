@@ -5,12 +5,13 @@ from routes.sales import sales_bp
 from routes.low_stock import low_stock_bp
 from routes.products import products_bp
 from routes.reports import reports_bp
-from models.users import create_admin, create_staff
+from models.users import create_admin
+from routes.admin import admin_bp
 from db import get_db_connection, create_tables
 
 create_tables()
 create_admin()
-create_staff()
+
 
 app = Flask(__name__)
 app.secret_key = "inventory_secret_key"
@@ -21,6 +22,7 @@ app.register_blueprint(sales_bp)
 app.register_blueprint(low_stock_bp)
 app.register_blueprint(products_bp)
 app.register_blueprint(reports_bp)
+app.register_blueprint(admin_bp)
 
 @app.route("/") 
 def home():
