@@ -50,7 +50,7 @@
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.category }}</td>
-                <td>${{ "%.2f"|format(product.price) }}</td>
+                <td>₹{{ "%.2f"|format(product.price) }}</td>
                 <td>
                     {% if product.stock_quantity <= product.low_stock_threshold %}
                     <span class="badge bg-danger">{{ product.stock_quantity }}</span>
@@ -164,7 +164,7 @@
                         <input type="text" class="form-control" name="category" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Price ($)</label>
+                        <label class="form-label">Price (₹)</label>
                         <input type="number" step="0.01" min="0.01" class="form-control" name="price" required>
                     </div>
                     <div class="mb-3">

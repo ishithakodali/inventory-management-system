@@ -22,7 +22,7 @@
         <div class="card text-white bg-danger mb-3 shadow-sm">
             <div class="card-body text-center">
                 <h5 class="card-title">Total Purchase Cost</h5>
-                <p class="card-text display-4">${{ "%.2f"|format(total_cost) }}</p>
+                <p class="card-text display-4">₹{{ "%.2f"|format(total_cost) }}</p>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
                             <tr>
                                 <td class="product-name">{{ row.name }}</td>
                                 <td>{{ row.total_quantity }}</td>
-                                <td>${{ "%.2f"|format(row.total_cost) }}</td>
+                                <td>₹{{ "%.2f"|format(row.total_cost) }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
