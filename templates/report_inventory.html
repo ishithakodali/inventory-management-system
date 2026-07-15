@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <h2>Inventory Report</h2>
+        <a href="/reports" class="btn btn-secondary">Back to Reports</a>
+    </div>
+</div>
+
+<!-- Stats Row -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3 shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Products</h5>
+                <p class="card-text display-4">{{ total_products }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3 shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Units in Stock</h5>
+                <p class="card-text display-4">{{ total_stock }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3 shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">Low Stock Products</h5>
+                <p class="card-text display-4">{{ low_stock_count }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Input -->
+<div class="row mb-3">
+    <div class="col-md-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search by Product Name...">
+    </div>
+</div>
+
+<!-- Inventory Table -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                {% if products %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="reportTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Supplier</th>
+                                <th>Current Stock</th>
+                                <th>Low Stock Threshold</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td>{{ product.id }}</td>
+                                <td class="product-name">{{ product.name }}</td>
+                                <td>{{ product.category }}</td>
+                                <td>{{ product.supplier }}</td>
+                                <td><strong>{{ product.stock_quantity }}</strong></td>
+                                <td>{{ product.low_stock_threshold }}</td>
+                                <td>
+                                    {% if product.stock_quantity <= product.low_stock_threshold %}
+                                        <span class="badge bg-danger">LOW STOCK</span>
+                                    {% else %}
+                                        <span class="badge bg-success">OK</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted p-3">
+                    <p class="mb-0">No products available in inventory.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll('#reportTable tbody tr');
+    
+    rows.forEach(row => {
+        let nameCell = row.querySelector('.product-name');
+        if (nameCell) {
+            let nameText = nameCell.textContent.toLowerCase();
+            row.style.display = nameText.includes(filter) ? '' : 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

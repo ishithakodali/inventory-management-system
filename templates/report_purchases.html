@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <h2>Purchases Report</h2>
+        <a href="/reports" class="btn btn-secondary">Back to Reports</a>
+    </div>
+</div>
+
+<!-- Stats Row -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3 shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Purchased Units</h5>
+                <p class="card-text display-4">{{ total_purchased_units }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger mb-3 shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Purchase Cost</h5>
+                <p class="card-text display-4">${{ "%.2f"|format(total_cost) }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3 shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">Number of Purchase Records</h5>
+                <p class="card-text display-4">{{ total_records }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Input -->
+<div class="row mb-3">
+    <div class="col-md-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search by Product Name...">
+    </div>
+</div>
+
+<!-- Purchases Table -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                {% if purchase_data %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="reportTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Total Quantity Purchased</th>
+                                <th>Total Purchase Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in purchase_data %}
+                            <tr>
+                                <td class="product-name">{{ row.name }}</td>
+                                <td>{{ row.total_quantity }}</td>
+                                <td>${{ "%.2f"|format(row.total_cost) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted p-3">
+                    <p class="mb-0">No purchase data available.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll('#reportTable tbody tr');
+    
+    rows.forEach(row => {
+        let nameCell = row.querySelector('.product-name');
+        if (nameCell) {
+            let nameText = nameCell.textContent.toLowerCase();
+            row.style.display = nameText.includes(filter) ? '' : 'none';
+        }
+    });
+});
+</script>
+{% endblock %}
