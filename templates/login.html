@@ -6,25 +6,29 @@
     <title>Login - Inventory Management System</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <!-- Bootstrap Icons (Optional Enhancements) -->
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body {
             background-color: #f5f6fa;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .login-card {
-            max-width: 400px;
+            max-width: 440px;
             width: 100%;
         }
     </style>
 </head>
-<body class="min-vh-100 d-flex justify-content-center align-items-center">
+<body>
 
-    <div class="card border-0 shadow-sm rounded-4 login-card p-4 mx-3">
-        <div class="card-body">
-            <div class="text-center mb-4">
-                <i class="bi bi-box-seam text-primary fs-1 mb-2 d-inline-block"></i>
-                <h4 class="mb-1 fw-bold text-dark">Inventory Management System</h4>
+    <div class="card border-0 shadow-sm rounded-4 login-card p-5 mx-3">
+        <div class="card-body p-0">
+            <div class="text-center mb-5">
+                <i class="bi bi-box-seam text-primary fs-1 mb-3 d-inline-block"></i>
+                <h4 class="mb-3 fw-bold text-dark">Inventory Management System</h4>
                 <p class="text-muted small mb-0">Sign in to continue</p>
             </div>
 
@@ -35,7 +39,7 @@
             </div>
             {% endif %}
 
-            <!-- Flash messages placeholder (Optional Enhancement) -->
+            <!-- Flash messages placeholder -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
@@ -48,17 +52,17 @@
             {% endwith %}
 
             <form method="POST" action="">
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="username" class="form-label text-secondary small fw-medium">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                    <input type="text" class="form-control form-control-lg fs-6" id="username" name="username" placeholder="Enter your username" required>
                 </div>
                 
-                <div class="mb-4">
+                <div class="mb-5">
                     <label for="password" class="form-label text-secondary small fw-medium">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                    <input type="password" class="form-control form-control-lg fs-6" id="password" name="password" placeholder="Enter your password" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+                <button type="submit" class="btn btn-primary btn-lg w-100 py-2 fs-6">Login</button>
             </form>
         </div>
     </div>
