@@ -24,7 +24,6 @@ def get_products():
             "id": row["id"],
             "name": row["name"],
             "category": row["category"],
-            "price": row["price"],
             "stock_quantity": row["stock_quantity"],
             "supplier": row["supplier"],
             "low_stock_threshold": row["low_stock_threshold"]
@@ -53,7 +52,7 @@ def add_product():
     """, (
         data["name"],
         data["category"],
-        data["price"],
+        0.0, # Price is deprecated, injecting 0.0 for DB compatibility
         data["stock_quantity"],
         data["supplier"],
         data["low_stock_threshold"]
@@ -106,7 +105,7 @@ def update_product(id):
     """, (
         data["name"],
         data["category"],
-        data["price"],
+        0.0, # Price is deprecated, injecting 0.0 for DB compatibility
         data["stock_quantity"],
         data["supplier"],
         data["low_stock_threshold"],
