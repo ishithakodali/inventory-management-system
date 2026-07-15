@@ -36,7 +36,7 @@ def add():
     try:
         price = float(price)
         if price <= 0:
-            flash('Price must be greater than zero.', 'danger')
+            flash('Selling Price must be greater than zero.', 'danger')
             return redirect(url_for('products.index'))
         
         stock_quantity = int(stock_quantity)
@@ -85,7 +85,7 @@ def edit(id):
     try:
         price = float(price)
         if price <= 0:
-            flash('Price must be greater than zero.', 'danger')
+            flash('Selling Price must be greater than zero.', 'danger')
             return redirect(url_for('products.index'))
         
         stock_quantity = int(stock_quantity)
