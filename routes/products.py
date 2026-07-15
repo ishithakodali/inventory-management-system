@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, abort
 from db import get_db_connection
 
 products_bp = Blueprint('products', __name__, url_prefix='/products')
@@ -21,7 +21,7 @@ def add():
     if "username" not in session:
         return redirect("/login")
     if session.get("role") != "Admin":
-        return "Access Denied", 403
+        abort(403)
     name = request.form.get('name')
     category = request.form.get('category')
     price = request.form.get('price')
@@ -70,7 +70,7 @@ def edit(id):
         return redirect("/login")
 
     if session.get("role") != "Admin":
-        return "Access Denied", 403
+        abort(403)
     name = request.form.get('name')
     category = request.form.get('category')
     price = request.form.get('price')
@@ -108,7 +108,6 @@ def edit(id):
     product = conn.execute("SELECT * FROM products WHERE id = ?", (id,)).fetchone()
     if not product:
         conn.close()
-        from flask import abort
         abort(404)
         
     conn.execute(
@@ -127,12 +126,11 @@ def delete(id):
         return redirect("/login")
 
     if session.get("role") != "Admin":
-        return "Access Denied", 403
+        abort(403)
     conn = get_db_connection()
     product = conn.execute("SELECT * FROM products WHERE id = ?", (id,)).fetchone()
     if not product:
         conn.close()
-        from flask import abort
         abort(404)
         
     conn.execute("DELETE FROM products WHERE id = ?", (id,))
