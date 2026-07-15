@@ -54,15 +54,15 @@ def sales():
         conn = get_db_connection()
         
         # Total Products Sold
-        total_products_sold_row = conn.execute("SELECT COUNT(DISTINCT product_id) as count FROM sales").fetchone()
+        total_products_sold_row = conn.execute("SELECT COUNT(DISTINCT s.product_id) as count FROM sales s JOIN products p ON s.product_id = p.id").fetchone()
         total_products_sold = total_products_sold_row["count"] if total_products_sold_row else 0
         
         # Total Revenue
-        total_revenue_row = conn.execute("SELECT COALESCE(SUM(quantity * selling_price), 0) as total FROM sales").fetchone()
+        total_revenue_row = conn.execute("SELECT COALESCE(SUM(s.quantity * s.selling_price), 0) as total FROM sales s JOIN products p ON s.product_id = p.id").fetchone()
         total_revenue = total_revenue_row["total"] if total_revenue_row and total_revenue_row["total"] else 0
         
         # Number of Sales Records
-        total_records_row = conn.execute("SELECT COUNT(*) as count FROM sales").fetchone()
+        total_records_row = conn.execute("SELECT COUNT(*) as count FROM sales s JOIN products p ON s.product_id = p.id").fetchone()
         total_records = total_records_row["count"] if total_records_row else 0
         
         # Fetch sales report data
@@ -97,15 +97,15 @@ def purchases():
         conn = get_db_connection()
         
         # Total Purchased Units
-        total_purchased_units_row = conn.execute("SELECT COALESCE(SUM(quantity), 0) as total FROM purchases").fetchone()
+        total_purchased_units_row = conn.execute("SELECT COALESCE(SUM(pu.quantity), 0) as total FROM purchases pu JOIN products p ON pu.product_id = p.id").fetchone()
         total_purchased_units = total_purchased_units_row["total"] if total_purchased_units_row and total_purchased_units_row["total"] else 0
         
         # Total Purchase Cost
-        total_cost_row = conn.execute("SELECT COALESCE(SUM(quantity * purchase_price), 0) as total FROM purchases").fetchone()
+        total_cost_row = conn.execute("SELECT COALESCE(SUM(pu.quantity * pu.purchase_price), 0) as total FROM purchases pu JOIN products p ON pu.product_id = p.id").fetchone()
         total_cost = total_cost_row["total"] if total_cost_row and total_cost_row["total"] else 0
         
         # Number of Purchase Records
-        total_records_row = conn.execute("SELECT COUNT(*) as count FROM purchases").fetchone()
+        total_records_row = conn.execute("SELECT COUNT(*) as count FROM purchases pu JOIN products p ON pu.product_id = p.id").fetchone()
         total_records = total_records_row["count"] if total_records_row else 0
         
         # Fetch purchase report data

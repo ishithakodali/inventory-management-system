@@ -42,11 +42,11 @@ def home():
     low_stock_products = conn.execute(low_stock_query).fetchall()
     low_stock_count = len(low_stock_products)
     # Calculate Purchase Value
-    purchase_value_row = conn.execute("SELECT COALESCE(SUM(quantity * purchase_price), 0) FROM purchases").fetchone()
+    purchase_value_row = conn.execute("SELECT COALESCE(SUM(pu.quantity * pu.purchase_price), 0) FROM purchases pu JOIN products p ON pu.product_id = p.id").fetchone()
     purchase_value = purchase_value_row[0] if purchase_value_row else 0
     
     # Calculate Sales Revenue
-    sales_revenue_row = conn.execute("SELECT COALESCE(SUM(quantity * selling_price), 0) FROM sales").fetchone()
+    sales_revenue_row = conn.execute("SELECT COALESCE(SUM(s.quantity * s.selling_price), 0) FROM sales s JOIN products p ON s.product_id = p.id").fetchone()
     sales_revenue = sales_revenue_row[0] if sales_revenue_row else 0
     
     conn.close()
