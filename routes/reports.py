@@ -69,12 +69,13 @@ def sales():
         query = """
             SELECT 
                 p.name, 
-                COALESCE(SUM(s.quantity), 0) AS total_quantity, 
-                COALESCE(SUM(s.quantity * s.selling_price), 0) AS total_revenue 
-            FROM products p 
-            LEFT JOIN sales s ON p.id = s.product_id 
-            GROUP BY p.id 
-            ORDER BY total_revenue DESC
+                s.quantity, 
+                s.selling_price,
+                (s.quantity * s.selling_price) AS total_revenue,
+                s.sale_date
+            FROM sales s 
+            JOIN products p ON p.id = s.product_id 
+            ORDER BY s.sale_date DESC
         """
         sales_data = conn.execute(query).fetchall()
         
@@ -112,12 +113,13 @@ def purchases():
         query = """
             SELECT 
                 p.name, 
-                COALESCE(SUM(pu.quantity), 0) AS total_quantity, 
-                COALESCE(SUM(pu.quantity * pu.purchase_price), 0) AS total_cost 
-            FROM products p 
-            LEFT JOIN purchases pu ON p.id = pu.product_id 
-            GROUP BY p.id 
-            ORDER BY total_quantity DESC
+                pu.quantity, 
+                pu.purchase_price,
+                (pu.quantity * pu.purchase_price) AS total_cost,
+                pu.purchase_date
+            FROM purchases pu 
+            JOIN products p ON p.id = pu.product_id 
+            ORDER BY pu.purchase_date DESC
         """
         purchase_data = conn.execute(query).fetchall()
         

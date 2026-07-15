@@ -54,16 +54,20 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Product Name</th>
-                                <th>Total Quantity Sold</th>
+                                <th>Quantity Sold</th>
+                                <th>Selling Price (Unit Price)</th>
                                 <th>Total Revenue</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for row in sales_data %}
                             <tr>
                                 <td class="product-name">{{ row.name }}</td>
-                                <td>{{ row.total_quantity }}</td>
+                                <td>{{ row.quantity }}</td>
+                                <td>₹{{ "%.2f"|format(row.selling_price) }}</td>
                                 <td>₹{{ "%.2f"|format(row.total_revenue) }}</td>
+                                <td>{{ row.sale_date }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

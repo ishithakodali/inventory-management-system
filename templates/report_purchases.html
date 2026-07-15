@@ -54,16 +54,20 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Product Name</th>
-                                <th>Total Quantity Purchased</th>
+                                <th>Quantity Purchased</th>
+                                <th>Purchase Cost (Unit Cost)</th>
                                 <th>Total Purchase Cost</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for row in purchase_data %}
                             <tr>
                                 <td class="product-name">{{ row.name }}</td>
-                                <td>{{ row.total_quantity }}</td>
+                                <td>{{ row.quantity }}</td>
+                                <td>₹{{ "%.2f"|format(row.purchase_price) }}</td>
                                 <td>₹{{ "%.2f"|format(row.total_cost) }}</td>
+                                <td>{{ row.purchase_date }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

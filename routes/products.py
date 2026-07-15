@@ -24,7 +24,7 @@ def add():
         abort(403)
     name = request.form.get('name')
     category = request.form.get('category')
-    price = request.form.get('price')
+    price = 0.0 # Price is no longer recorded on the product level
     stock_quantity = request.form.get('stock_quantity')
     supplier = request.form.get('supplier')
     low_stock_threshold = request.form.get('low_stock_threshold')
@@ -34,11 +34,7 @@ def add():
         return redirect(url_for('products.index'))
     
     try:
-        price = float(price)
-        if price <= 0:
-            flash('Selling Price must be greater than zero.', 'danger')
-            return redirect(url_for('products.index'))
-        
+        # No longer validate selling price here
         stock_quantity = int(stock_quantity)
         if stock_quantity < 0:
             flash('Stock cannot be negative.', 'danger')
@@ -73,7 +69,7 @@ def edit(id):
         abort(403)
     name = request.form.get('name')
     category = request.form.get('category')
-    price = request.form.get('price')
+    price = 0.0 # Price is no longer recorded on the product level
     stock_quantity = request.form.get('stock_quantity')
     supplier = request.form.get('supplier')
     low_stock_threshold = request.form.get('low_stock_threshold')
@@ -83,11 +79,7 @@ def edit(id):
         return redirect(url_for('products.index'))
     
     try:
-        price = float(price)
-        if price <= 0:
-            flash('Selling Price must be greater than zero.', 'danger')
-            return redirect(url_for('products.index'))
-        
+        # No longer validate selling price here
         stock_quantity = int(stock_quantity)
         if stock_quantity < 0:
             flash('Stock cannot be negative.', 'danger')
