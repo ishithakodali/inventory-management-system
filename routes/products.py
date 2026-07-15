@@ -129,13 +129,25 @@ def delete(id):
         abort(403)
     conn = get_db_connection()
     product = conn.execute("SELECT * FROM products WHERE id = ?", (id,)).fetchone()
+    
     if not product:
         conn.close()
         abort(404)
         
-    conn.execute("DELETE FROM products WHERE id = ?", (id,))
-    conn.commit()
-    conn.close()
+    try:
+        # Delete related purchases first
+        conn.execute("DELETE FROM purchases WHERE product_id = ?", (id,))
+        # Delete related sales next
+        conn.execute("DELETE FROM sales WHERE product_id = ?", (id,))
+        # Finally delete the product
+        conn.execute("DELETE FROM products WHERE id = ?", (id,))
+        
+        conn.commit()
+        flash('Product and all related records deleted successfully!', 'success')
+    except Exception as e:
+        conn.rollback()
+        flash('An error occurred during deletion. The operation was aborted.', 'danger')
+    finally:
+        conn.close()
     
-    flash('Product deleted successfully!', 'success')
     return redirect(url_for('products.index'))
