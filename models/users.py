@@ -150,3 +150,17 @@ def approve_staff(user_id):
     connection.close()
 
     return True
+
+def delete_staff(user_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        DELETE FROM users
+        WHERE id = ?
+    """, (user_id,))
+
+    connection.commit()
+    connection.close()
+
+    return True
