@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash
 
 from models.users import check_login, register_staff
 
@@ -40,10 +40,8 @@ def register():
         success = register_staff(username, password)
 
         if success:
-            return render_template(
-                "login.html",
-                success="Registration submitted successfully. Please wait for admin approval."
-            )
+            flash("Registration submitted successfully. Please wait for admin approval.", "success")
+            return redirect(url_for("auth.login"))
 
         return render_template(
             "register.html",
