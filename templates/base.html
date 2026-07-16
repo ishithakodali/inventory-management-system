@@ -36,7 +36,16 @@
                     </li>
                     {% if session.get('role') == 'Admin' %}
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('reports.') %}active{% endif %}" href="/reports">Reports</a>
+                        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('reports.') %}active{% endif %}" href="/reports">
+                            Reports
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('admin.') %}active{% endif %}"
+                            href="/pending_staff">
+                                Staff Approvals
+                        </a>
                     </li>
                     {% endif %}
                     <li class="nav-item">

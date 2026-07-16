@@ -5,9 +5,14 @@ def add_user(username, password, role):
     cursor = connection.cursor()
 
     cursor.execute("""
-        INSERT INTO users(username, password, role)
-        VALUES (?, ?, ?)
-    """, (username, password, role))
+    INSERT INTO users(username, password, role, status)
+    VALUES (?, ?, ?, ?)
+""", (
+    username,
+    password,
+    role,
+    "Pending"
+))
 
     connection.commit()
     connection.close()
@@ -34,10 +39,15 @@ def check_login(username, password):
     cursor = connection.cursor()
 
     cursor.execute("""
-        SELECT * FROM users
-        WHERE username = ?
-        AND password = ?
-    """, (username, password))
+    SELECT *
+    FROM users
+    WHERE username = ?
+    AND password = ?
+    AND status = 'Approved'
+""", (
+    username,
+    password
+))
 
     user = cursor.fetchone()
 
@@ -51,24 +61,30 @@ def create_admin():
     cursor = connection.cursor()
 
     cursor.execute("""
-        SELECT * FROM users
-        WHERE username='admin'
-    """)
+        SELECT *
+        FROM users
+        WHERE username = ?
+    """, ("admin",))
 
     admin = cursor.fetchone()
 
     if admin is None:
 
         cursor.execute("""
-            INSERT INTO users(username,password,role)
-            VALUES('admin','admin123','Admin')
-        """)
+            INSERT INTO users(username, password, role, status)
+            VALUES (?, ?, ?, ?)
+        """, (
+            "admin",
+            "admin123",
+            "Admin",
+            "Approved"
+        ))
 
         connection.commit()
 
     connection.close()
 
-def create_staff():
+def register_staff(username, password):
 
     connection = get_db_connection()
     cursor = connection.cursor()
@@ -77,21 +93,74 @@ def create_staff():
         SELECT *
         FROM users
         WHERE username = ?
-    """, ("staff",))
+    """, (username,))
 
-    staff = cursor.fetchone()
+    existing_user = cursor.fetchone()
 
-    if staff is None:
+    if existing_user:
+        connection.close()
+        return False
 
-        cursor.execute("""
-            INSERT INTO users(username, password, role)
-            VALUES (?, ?, ?)
-        """, (
-            "staff",
-            "staff123",
-            "Staff"
-        ))
+    cursor.execute("""
+        INSERT INTO users
+        (username, password, role, status)
+        VALUES (?, ?, ?, ?)
+    """, (
+        username,
+        password,
+        "Staff",
+        "Pending"
+    ))
 
-        connection.commit()
+    connection.commit()
+    connection.close()
+
+    return True
+
+def get_pending_staff():
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM users
+        WHERE role = 'Staff'
+        AND status = 'Pending'
+    """)
+
+    staff = cursor.fetchall()
 
     connection.close()
+
+    return staff
+
+def approve_staff(user_id):
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        UPDATE users
+        SET status = 'Approved'
+        WHERE id = ?
+    """, (user_id,))
+
+    connection.commit()
+    connection.close()
+
+    return True
+
+def delete_staff(user_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        DELETE FROM users
+        WHERE id = ?
+    """, (user_id,))
+
+    connection.commit()
+    connection.close()
+
+    return True
