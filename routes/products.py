@@ -45,6 +45,10 @@ def add():
             flash('Threshold must be a non-negative integer.', 'danger')
             return redirect(url_for('products.index'))
 
+        if stock_quantity <= low_stock_threshold:
+            flash('Initial stock must be greater than the low stock threshold.', 'danger')
+            return redirect(url_for('products.index'))
+
     except (ValueError, TypeError):
         flash('Invalid numeric input.', 'danger')
         return redirect(url_for('products.index'))
@@ -88,6 +92,10 @@ def edit(id):
         low_stock_threshold = int(low_stock_threshold)
         if low_stock_threshold < 0:
             flash('Threshold must be a non-negative integer.', 'danger')
+            return redirect(url_for('products.index'))
+
+        if stock_quantity <= low_stock_threshold:
+            flash('Initial stock must be greater than the low stock threshold.', 'danger')
             return redirect(url_for('products.index'))
 
     except (ValueError, TypeError):
