@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, session, redirect, render_template
 from routes.auth import auth_bp
 from routes.purchase import purchase_bp
@@ -15,6 +17,14 @@ create_admin()
 
 app = Flask(__name__)
 app.secret_key = "inventory_secret_key"
+app.config.update(
+    SMTP_HOST=os.getenv("SMTP_HOST"),
+    SMTP_PORT=int(os.getenv("SMTP_PORT", "587")),
+    SMTP_USERNAME=os.getenv("SMTP_USERNAME"),
+    SMTP_PASSWORD=os.getenv("SMTP_PASSWORD"),
+    SMTP_FROM_EMAIL=os.getenv("SMTP_FROM_EMAIL"),
+    SMTP_USE_TLS=os.getenv("SMTP_USE_TLS", "true").lower() in {"1", "true", "yes", "on"},
+)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(purchase_bp)

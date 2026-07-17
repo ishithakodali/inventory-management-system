@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, session, url_for, flash
+from flask import Blueprint, render_template, request, redirect, session, url_for
 
-from models.users import check_login, register_staff
+from models.users import check_login
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -32,24 +32,7 @@ def login():
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
 
-    if request.method == "POST":
-
-        username = request.form["username"]
-        password = request.form["password"]
-
-        success = register_staff(username, password)
-
-        if success:
-            flash("Registration submitted successfully. Please wait for admin approval.", "success")
-            return redirect(url_for("auth.login"))
-
-        return render_template(
-            "register.html",
-            error="Username already exists."
-        )
-
-    return render_template("register.html")
-
+    return redirect(url_for("auth.login"))
 
 @auth_bp.route("/logout")
 def logout():

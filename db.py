@@ -1,7 +1,9 @@
+import os
 import sqlite3
 
 def get_db_connection():
-    conn = sqlite3.connect("inventory.db")
+    database_path = os.getenv("INVENTORY_DB_PATH", "inventory.db")
+    conn = sqlite3.connect(database_path)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -31,6 +33,20 @@ def create_tables():
         status TEXT NOT NULL DEFAULT 'Pending'           
     )
 """)
+
+    user_columns = {
+        row["name"]
+        for row in cursor.execute("PRAGMA table_info(users)").fetchall()
+    }
+    if "email" not in user_columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN email TEXT")
+
+    cursor.execute("""
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_unique
+        ON users(email COLLATE NOCASE)
+        WHERE email IS NOT NULL
+    """)
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS purchases (
             id INTEGER PRIMARY KEY,
