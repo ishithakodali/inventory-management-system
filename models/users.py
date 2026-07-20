@@ -1,15 +1,19 @@
 from db import get_db_connection
+from werkzeug.security import generate_password_hash, check_password_hash
+
 def add_user(username, password, role):
 
     connection = get_db_connection()
     cursor = connection.cursor()
+
+    hashed_password = generate_password_hash(password)
 
     cursor.execute("""
     INSERT INTO users(username, password, role, status)
     VALUES (?, ?, ?, ?)
 """, (
     username,
-    password,
+    hashed_password,
     role,
     "Pending"
 ))
@@ -42,18 +46,19 @@ def check_login(username, password):
     SELECT *
     FROM users
     WHERE username = ?
-    AND password = ?
     AND status = 'Approved'
 """, (
     username,
-    password
 ))
 
     user = cursor.fetchone()
 
     connection.close()
 
-    return user
+    if user and check_password_hash(user['password'], password):
+        return user
+        
+    return None
 
 def create_admin():
 
@@ -70,12 +75,14 @@ def create_admin():
 
     if admin is None:
 
+        hashed_password = generate_password_hash("admin123")
+
         cursor.execute("""
             INSERT INTO users(username, password, role, status)
             VALUES (?, ?, ?, ?)
         """, (
             "admin",
-            "admin123",
+            hashed_password,
             "Admin",
             "Approved"
         ))
@@ -101,13 +108,15 @@ def register_staff(username, password):
         connection.close()
         return False
 
+    hashed_password = generate_password_hash(password)
+
     cursor.execute("""
         INSERT INTO users
         (username, password, role, status)
         VALUES (?, ?, ?, ?)
     """, (
         username,
-        password,
+        hashed_password,
         "Staff",
         "Pending"
     ))
