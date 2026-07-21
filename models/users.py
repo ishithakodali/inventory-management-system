@@ -70,6 +70,16 @@ def check_login(username, password):
     return user if authenticated else None
 
 
+def update_password(username, new_password_hash):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute(
+        "UPDATE users SET password = ? WHERE username = ?",
+        (new_password_hash, username)
+    )
+    connection.commit()
+    connection.close()
+
 
 def create_admin():
     connection = get_db_connection()
