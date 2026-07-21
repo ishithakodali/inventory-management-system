@@ -3,7 +3,25 @@ from hmac import compare_digest
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import get_db_connection
+def add_user(username, password, role):
 
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    hashed_password = generate_password_hash(password)
+
+    cursor.execute("""
+    INSERT INTO users(username, password, role, status)
+    VALUES (?, ?, ?, ?)
+""", (
+    username,
+    hashed_password,
+    role,
+    "Pending"
+))
+
+    connection.commit()
+    connection.close()
 
 def get_user(username):
     connection = get_db_connection()
@@ -52,6 +70,7 @@ def check_login(username, password):
     return user if authenticated else None
 
 
+
 def create_admin():
     connection = get_db_connection()
     cursor = connection.cursor()
@@ -75,3 +94,86 @@ def create_admin():
         connection.commit()
 
     connection.close()
+
+def register_staff(username, password):
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM users
+        WHERE username = ?
+    """, (username,))
+
+    existing_user = cursor.fetchone()
+
+    if existing_user:
+        connection.close()
+        return False
+
+    hashed_password = generate_password_hash(password)
+
+    cursor.execute("""
+        INSERT INTO users
+        (username, password, role, status)
+        VALUES (?, ?, ?, ?)
+    """, (
+        username,
+        hashed_password,
+        "Staff",
+        "Pending"
+    ))
+
+    connection.commit()
+    connection.close()
+
+    return True
+
+def get_pending_staff():
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM users
+        WHERE role = 'Staff'
+        AND status = 'Pending'
+    """)
+
+    staff = cursor.fetchall()
+
+    connection.close()
+
+    return staff
+
+def approve_staff(user_id):
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        UPDATE users
+        SET status = 'Approved'
+        WHERE id = ?
+    """, (user_id,))
+
+    connection.commit()
+    connection.close()
+
+    return True
+
+def delete_staff(user_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        DELETE FROM users
+        WHERE id = ?
+    """, (user_id,))
+
+    connection.commit()
+    connection.close()
+
+    return True
