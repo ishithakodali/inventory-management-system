@@ -3,6 +3,40 @@ from db import get_db_connection
 
 products_bp = Blueprint('products', __name__, url_prefix='/products')
 
+def _extract_and_validate_product_form():
+    name = request.form.get('name')
+    category = request.form.get('category')
+    price = 0.0 # Price is no longer recorded on the product level
+    stock_quantity = request.form.get('stock_quantity')
+    supplier = request.form.get('supplier')
+    low_stock_threshold = request.form.get('low_stock_threshold')
+
+    if not name or not category or not supplier or low_stock_threshold is None:
+        flash('Name, Category, and Supplier are required.', 'danger')
+        return None
+    
+    try:
+        # No longer validate selling price here
+        stock_quantity = int(stock_quantity)
+        if stock_quantity < 0:
+            flash('Stock cannot be negative.', 'danger')
+            return None
+
+        low_stock_threshold = int(low_stock_threshold)
+        if low_stock_threshold < 0:
+            flash('Threshold must be a non-negative integer.', 'danger')
+            return None
+
+        if stock_quantity <= low_stock_threshold:
+            flash('Initial stock must be greater than the low stock threshold.', 'danger')
+            return None
+
+    except (ValueError, TypeError):
+        flash('Invalid numeric input.', 'danger')
+        return None
+
+    return (name, category, price, stock_quantity, supplier, low_stock_threshold)
+
 @products_bp.route('/')
 def index():
     if "username" not in session:
@@ -22,36 +56,10 @@ def add():
         return redirect("/login")
     if session.get("role") != "Admin":
         abort(403)
-    name = request.form.get('name')
-    category = request.form.get('category')
-    price = 0.0 # Price is no longer recorded on the product level
-    stock_quantity = request.form.get('stock_quantity')
-    supplier = request.form.get('supplier')
-    low_stock_threshold = request.form.get('low_stock_threshold')
-
-    if not name or not category or not supplier or low_stock_threshold is None:
-        flash('Name, Category, and Supplier are required.', 'danger')
+    valid_data = _extract_and_validate_product_form()
+    if not valid_data:
         return redirect(url_for('products.index'))
-    
-    try:
-        # No longer validate selling price here
-        stock_quantity = int(stock_quantity)
-        if stock_quantity < 0:
-            flash('Stock cannot be negative.', 'danger')
-            return redirect(url_for('products.index'))
-
-        low_stock_threshold = int(low_stock_threshold)
-        if low_stock_threshold < 0:
-            flash('Threshold must be a non-negative integer.', 'danger')
-            return redirect(url_for('products.index'))
-
-        if stock_quantity <= low_stock_threshold:
-            flash('Initial stock must be greater than the low stock threshold.', 'danger')
-            return redirect(url_for('products.index'))
-
-    except (ValueError, TypeError):
-        flash('Invalid numeric input.', 'danger')
-        return redirect(url_for('products.index'))
+    name, category, price, stock_quantity, supplier, low_stock_threshold = valid_data
 
     conn = get_db_connection()
     conn.execute(
@@ -71,36 +79,10 @@ def edit(id):
 
     if session.get("role") != "Admin":
         abort(403)
-    name = request.form.get('name')
-    category = request.form.get('category')
-    price = 0.0 # Price is no longer recorded on the product level
-    stock_quantity = request.form.get('stock_quantity')
-    supplier = request.form.get('supplier')
-    low_stock_threshold = request.form.get('low_stock_threshold')
-
-    if not name or not category or not supplier or low_stock_threshold is None:
-        flash('Name, Category, and Supplier are required.', 'danger')
+    valid_data = _extract_and_validate_product_form()
+    if not valid_data:
         return redirect(url_for('products.index'))
-    
-    try:
-        # No longer validate selling price here
-        stock_quantity = int(stock_quantity)
-        if stock_quantity < 0:
-            flash('Stock cannot be negative.', 'danger')
-            return redirect(url_for('products.index'))
-
-        low_stock_threshold = int(low_stock_threshold)
-        if low_stock_threshold < 0:
-            flash('Threshold must be a non-negative integer.', 'danger')
-            return redirect(url_for('products.index'))
-
-        if stock_quantity <= low_stock_threshold:
-            flash('Initial stock must be greater than the low stock threshold.', 'danger')
-            return redirect(url_for('products.index'))
-
-    except (ValueError, TypeError):
-        flash('Invalid numeric input.', 'danger')
-        return redirect(url_for('products.index'))
+    name, category, price, stock_quantity, supplier, low_stock_threshold = valid_data
         
     conn = get_db_connection()
     
