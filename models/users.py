@@ -8,6 +8,37 @@ def add_user(username, password, role):
     connection = get_db_connection()
     cursor = connection.cursor()
 
+    # Remove extra spaces
+    username = username.strip()
+
+    # Username validation
+    if not username:
+        connection.close()
+        return False, "Username cannot be empty."
+
+    # Password validation
+    if len(password) < 8:
+        connection.close()
+        return False, "Password must be at least 8 characters."
+
+    # Role validation
+    allowed_roles = ["Admin", "Staff"]
+
+    if role not in allowed_roles:
+        connection.close()
+        return False, "Invalid role selected."
+
+    # Check if username already exists
+    cursor.execute("""
+        SELECT id
+        FROM users
+        WHERE username = ?
+    """, (username,))
+
+    if cursor.fetchone():
+        connection.close()
+        return False, "Username already exists."
+
     hashed_password = generate_password_hash(password)
 
     cursor.execute("""
@@ -22,6 +53,7 @@ def add_user(username, password, role):
 
     connection.commit()
     connection.close()
+    return True, "User created successfully."
 
 def get_user(username):
     connection = get_db_connection()
@@ -109,6 +141,22 @@ def register_staff(username, password):
 
     connection = get_db_connection()
     cursor = connection.cursor()
+    # Remove extra spaces
+    username = username.strip()
+
+    # Username validation
+    if not username:
+        connection.close()
+        return False
+
+    # Password validation
+    if not password:
+        connection.close()
+        return False
+
+    if len(password) < 8:
+        connection.close()
+        return False
 
     cursor.execute("""
         SELECT *

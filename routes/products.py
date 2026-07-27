@@ -4,7 +4,7 @@ from db import get_db_connection
 products_bp = Blueprint('products', __name__, url_prefix='/products')
 
 def _extract_and_validate_product_form():
-    name = request.form.get('name')
+    name = request.form.get('name').strip()
     category = request.form.get('category')
     price = 0.0 # Price is no longer recorded on the product level
     stock_quantity = request.form.get('stock_quantity')

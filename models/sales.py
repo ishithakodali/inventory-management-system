@@ -41,7 +41,31 @@ def add_sale(product_id, quantity, selling_price, sale_date):
         connection.close()
         return False
 
-    if product["stock_quantity"] < int(quantity):
+    # Validate quantity
+    try:
+        quantity = int(quantity)
+
+        if quantity <= 0:
+            connection.close()
+            return False
+
+    except ValueError:
+        connection.close()
+        return False
+
+    # Validate selling price
+    try:
+        selling_price = float(selling_price)
+
+        if selling_price <= 0:
+            connection.close()
+            return False
+
+    except ValueError:
+        connection.close()
+        return False
+
+    if product["stock_quantity"] < quantity:
         connection.close()
         return False
 

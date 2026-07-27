@@ -14,6 +14,12 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
+        if not username or not password:
+            return render_template(
+                "login.html",
+                    error="Username and password are required."
+            )
+
         user = check_login(username, password)
 
         if user:

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session, flash
 
 from db import get_db_connection
 from models.sales import get_all_sales, add_sale
@@ -48,10 +48,34 @@ def add_sale_route():
     if "username" not in session:
         return redirect("/login")
 
-    product_id = request.form["product_id"]
-    quantity = request.form["quantity"]
-    selling_price = request.form["selling_price"]
-    sale_date = request.form["sale_date"]
+    product_id = request.form.get("product_id", "").strip()
+    quantity = request.form.get("quantity", "").strip()
+    selling_price = request.form.get("selling_price", "").strip()
+    sale_date = request.form.get("sale_date", "").strip()
+
+    # Required field validation
+    if not product_id or not quantity or not selling_price or not sale_date:
+        return "All fields are required."
+
+    # Quantity validation
+    try:
+        quantity = int(quantity)
+
+        if quantity <= 0:
+            return "Quantity must be greater than zero."
+
+    except ValueError:
+        return "Invalid quantity."
+
+    # Selling price validation
+    try:
+        selling_price = float(selling_price)
+
+        if selling_price <= 0:
+            return "Selling price must be greater than zero."
+
+    except ValueError:
+        return "Invalid selling price."
 
     success = add_sale(
         product_id,
@@ -61,6 +85,5 @@ def add_sale_route():
     )
 
     if not success:
-        return "Insufficient Stock or Product Not Found"
-
-    return redirect("/sales")
+        flash("Insufficient stock or invalid product.", "danger")
+        return redirect("/sales")
