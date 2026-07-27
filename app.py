@@ -1,8 +1,6 @@
 from dotenv import load_dotenv
 load_dotenv()
-
 import os
-
 from flask import Flask, session, redirect, render_template
 from routes.auth import auth_bp
 from routes.purchase import purchase_bp
