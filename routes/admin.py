@@ -31,7 +31,7 @@ def manage_users():
         except StaffAccountError as error:
             flash(str(error), "danger")
         else:
-            flash("Staff account created and login credentials emailed.", "success")
+            flash("Staff account created successfully.", "success")
             return redirect(url_for("admin.manage_users"))
 
     return render_template("manage_users.html", form_data=form_data)

@@ -62,16 +62,23 @@ def create_staff_account(username, email, temporary_password, confirm_password, 
                 "Approved",
             ),
         )
-        send_staff_credentials_email(
-            email,
-            username,
-            temporary_password,
-            smtp_config,
-        )
+       # Save the account first
         connection.commit()
-    except EmailDeliveryError as error:
-        connection.rollback()
-        raise StaffAccountError(str(error)) from error
+
+    # Try to send email
+        try:
+            send_staff_credentials_email(
+                email,
+                username,
+                temporary_password,
+                smtp_config,
+            )
+        except EmailDeliveryError:
+            # Ignore email errors
+            pass
+        
+        connection.commit()
+    
     except sqlite3.IntegrityError as error:
         connection.rollback()
         raise StaffAccountError("An account with that username or email already exists.") from error
